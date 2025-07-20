@@ -96,7 +96,7 @@ func main() {
 func run() error {
 	t := template.Must(template.New("switch").Parse(tmpl))
 
-	f, err := os.Create("encoder.go")
+	f, err := os.Create("encoder_gen.go")
 	if err != nil {
 		return err
 	}

@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "stable"
+
+      - name: Restore bin
+        uses: actions/cache@v3
+        with:
+          path: ./bin
+          key: ${{ runner.os }}-bin-${{ hashFiles('**/go.sum') }}
+
+      - name: Run linter
+        run: make lint
+
+      - name: Cache bin
+        uses: actions/cache@v3
+        with:
+          path: ./bin
+          key: ${{ runner.os }}-bin-${{ hashFiles('**/go.sum') }}
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "stable"
+
+      - name: Restore bin
+        uses: actions/cache@v3
+        with:
+          path: ./bin
+          key: ${{ runner.os }}-bin-${{ hashFiles('**/go.sum') }}
+
+      - name: Run tests
+        run: make test
+
+      - name: Cache bin
+        uses: actions/cache@v3
+        with:
+          path: ./bin
+          key: ${{ runner.os }}-bin-${{ hashFiles('**/go.sum') }}
+
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "stable"
+
+      - name: Tool bins
+        uses: actions/cache@v4
+        with:
+          path: bin
+          key: ${{ runner.os }}-bin-${{ hashFiles('**/go.sum') }}
+
+      - name: Auto generate files
+        run: make generate
+
+      - name: Check for file changes
+        run: git diff --exit-code

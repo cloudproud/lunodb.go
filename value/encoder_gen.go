@@ -3,11 +3,11 @@ package value
 
 import (
 	"fmt"
-
+	
 	netip "net/netip"
 
-	lunopb "github.com/cloudproud/lunodb.api/proto/types"
 	"github.com/cloudproud/lunodb.go/types"
+	lunopb "github.com/cloudproud/lunodb.api/proto/types"
 )
 
 func Encode(val any, buf []byte) (_ *lunopb.Type, _ []byte, err error) {
