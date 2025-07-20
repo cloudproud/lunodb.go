@@ -90,7 +90,7 @@ func (c *Connector) Scan(ctx context.Context, plan *plan.Literal, writer lunodb.
 		return err
 	}
 
-	defer res.Body.Close()
+	defer res.Body.Close() //nolint:errcheck
 
 	weather := WeatherResponse{}
 	decoder := json.NewDecoder(res.Body)

@@ -13,7 +13,7 @@ func EncodeObject(val map[string]any, buf []byte) (frame []byte, err error) {
 		buf = append(buf, []byte(k)...)
 		buf = append(buf, 0)
 
-		typed, frame, err = Encode(v, []byte{})
+		typed, frame, err = Encode(v, nil)
 		if err != nil {
 			return nil, err
 		}
@@ -23,10 +23,7 @@ func EncodeObject(val map[string]any, buf []byte) (frame []byte, err error) {
 			return nil, err
 		}
 
-		buf = make([]byte, len(header)+4)
-		binary.BigEndian.PutUint32(buf[:4], uint32(len(header)))
-		copy(buf[4:], header)
-
+		buf = binary.BigEndian.AppendUint32(buf, uint32(len(header)))
 		buf = binary.BigEndian.AppendUint32(buf, uint32(len(frame)))
 		buf = append(buf, frame...)
 	}

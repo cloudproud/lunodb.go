@@ -88,7 +88,7 @@ type TemplateData struct {
 
 func main() {
 	if err := run(); err != nil {
-		os.Stderr.WriteString(err.Error() + "\n")
+		os.Stderr.WriteString(err.Error() + "\n") //nolint:errcheck
 		os.Exit(1)
 	}
 }
@@ -100,7 +100,7 @@ func run() error {
 	if err != nil {
 		return err
 	}
-	defer f.Close()
+	defer f.Close() //nolint:errcheck
 
 	packages := make(map[string]string)
 	for index, typ := range types {
